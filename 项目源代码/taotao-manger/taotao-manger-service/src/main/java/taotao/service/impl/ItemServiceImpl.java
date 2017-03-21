@@ -1,10 +1,15 @@
 package taotao.service.impl;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+
+import taotao.common.pojo.EasyUiDataGrid;
 import taotao.mapper.TbItemMapper;
 import taotao.pojo.TbItem;
 import taotao.pojo.TbItemExample;
@@ -37,6 +42,31 @@ public class ItemServiceImpl implements ItemService {
 			return list.get(0);
 		}
 		return null;
+	}
+
+	/**
+	 * 商品列表查询
+	 * 
+	 * @param page
+	 * @param rows
+	 * @return
+	 * @author 彭秉浪
+	 */
+	@Override
+	public EasyUiDataGrid getItemList(int page, int rows) {
+		// 查询商品列表
+		TbItemExample example = new TbItemExample();
+		PageHelper.startPage(page, rows); // 分页处理
+		List<TbItem> list = itemMapper.selectByExample(example);
+
+		// 创建返回值对象
+		EasyUiDataGrid result = new EasyUiDataGrid();
+		result.setRows(list);
+
+		// 取出数据总条数
+		PageInfo<TbItem> pageInfo = new PageInfo<>(list);
+		result.setTotal(pageInfo.getTotal());
+		return result;
 	}
 
 }
