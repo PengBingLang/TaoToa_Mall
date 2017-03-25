@@ -19,7 +19,7 @@ import taotao.service.ItemCatService;
  * @author 彭秉浪
  */
 @Service
-public class ItemCatServiceImlp implements ItemCatService {
+public class ItemCatServiceImpl implements ItemCatService {
 
 	@Autowired
 	private TbItemCatMapper itemCatMapper;

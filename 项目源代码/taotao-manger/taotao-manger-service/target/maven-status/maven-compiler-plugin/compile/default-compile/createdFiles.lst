@@ -1,6 +1,10 @@
 taotao\service\PictureService.class
 taotao\service\impl\PictureServiceImpl.class
 taotao\service\impl\ItemServiceImpl.class
-taotao\service\ItemService.class
-taotao\service\impl\ItemCatServiceImlp.class
+taotao\service\impl\ItemParamItemServiceImpl.class
+taotao\service\impl\ItemParamServiceImpl.class
 taotao\service\ItemCatService.class
+taotao\service\ItemParamService.class
+taotao\service\impl\ItemCatServiceImpl.class
+taotao\service\ItemParamItemService.class
+taotao\service\ItemService.class

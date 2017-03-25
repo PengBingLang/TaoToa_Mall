@@ -1,4 +1,6 @@
-taotao\controller\ItemController.class
-taotao\controller\PageController.class
 taotao\controller\ItemCatController.class
+taotao\controller\ItemController.class
+taotao\controller\ItemParamController.class
+taotao\controller\PageController.class
+taotao\controller\ItemParamItemController.class
 taotao\controller\PrctureController.class

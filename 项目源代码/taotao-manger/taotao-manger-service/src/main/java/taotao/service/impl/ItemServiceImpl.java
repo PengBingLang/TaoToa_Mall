@@ -12,10 +12,15 @@ import com.github.pagehelper.PageInfo;
 import taotao.common.pojo.EasyUiDataGrid;
 import taotao.common.utils.IDUtils;
 import taotao.common.utils.TaotaoResult;
+import taotao.mapper.TbItemDescMapper;
 import taotao.mapper.TbItemMapper;
+import taotao.mapper.TbItemParamItemMapper;
 import taotao.pojo.TbItem;
+import taotao.pojo.TbItemDesc;
 import taotao.pojo.TbItemExample;
 import taotao.pojo.TbItemExample.Criteria;
+import taotao.pojo.TbItemParam;
+import taotao.pojo.TbItemParamItem;
 import taotao.service.ItemService;
 
 /**
@@ -28,7 +33,18 @@ public class ItemServiceImpl implements ItemService {
 
 	@Autowired
 	private TbItemMapper itemMapper;
+	@Autowired
+	private TbItemDescMapper itemDescMapper;
+	@Autowired
+	private TbItemParamItemMapper itemParamItemMapper;
 
+	/**
+	 * 根据ID查询单个商品
+	 * 
+	 * @param itemId
+	 * @return
+	 * @author 彭秉浪
+	 */
 	@Override
 	public TbItem getItemById(long itemId) {
 		// 第一种方法：
@@ -71,8 +87,16 @@ public class ItemServiceImpl implements ItemService {
 		return result;
 	}
 
+	/**
+	 * 添加一个新商品
+	 * 
+	 * @param item
+	 * @param desc
+	 * @return
+	 * @author 彭秉浪
+	 */
 	@Override
-	public TaotaoResult createItem(TbItem item) {
+	public TaotaoResult createItem(TbItem item, String desc, String itemParam) throws Exception {
 		// 将tbItem补全
 		// 生成商品ID
 		Long id = IDUtils.genItemId();
@@ -83,7 +107,53 @@ public class ItemServiceImpl implements ItemService {
 		item.setUpdated(new Date());
 		// 插入到数据库
 		itemMapper.insert(item);
+
+		// 添加商品描述信息
+		TaotaoResult result = insertItemDesc(id, desc);
+		if (result.getStatus() != 200) {
+			throw new Exception();
+		}
+
+		// 添加规格参数
+		result = insertItemParamItem(id, itemParam);
 		return TaotaoResult.ok();
 	}
 
+	/**
+	 * 添加商品描述
+	 * 
+	 * @param itemId
+	 * @param desc
+	 * @return
+	 * @author 彭秉浪
+	 */
+	private TaotaoResult insertItemDesc(Long itemId, String desc) {
+		TbItemDesc itemDesc = new TbItemDesc();
+		itemDesc.setItemId(itemId);
+		itemDesc.setItemDesc(desc);
+		itemDesc.setCreated(new Date());
+		itemDesc.setUpdated(new Date());
+		itemDescMapper.insert(itemDesc);
+		return TaotaoResult.ok();
+	}
+
+	/**
+	 * 添加商品的规格参数
+	 * 
+	 * @param itemId
+	 * @param itemParam
+	 * @return
+	 * @author 彭秉浪
+	 */
+	private TaotaoResult insertItemParamItem(Long itemId, String itemParam) {
+		// 创建一个pojo
+		TbItemParamItem itemParamItem = new TbItemParamItem();
+		itemParamItem.setItemId(itemId);
+		itemParamItem.setParamData(itemParam);
+		itemParamItem.setCreated(new Date());
+		itemParamItem.setUpdated(new Date());
+		// 向数据库中插入数据
+		itemParamItemMapper.insert(itemParamItem);
+		return TaotaoResult.ok();
+	}
 }
